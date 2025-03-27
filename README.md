@@ -27,7 +27,7 @@ Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal zu nu
 
     # Umgebung erstellen
     python -m venv blip_env
-    source blip_env/bin/activate  # Linux/Mac
+    source blip_env/bin/activate
 
     # Abhängigkeiten
     pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
