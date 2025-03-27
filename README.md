@@ -77,7 +77,7 @@ Dieses Repository enthält die FLASK-Apps der KI-Modelle aus unserem Workshop.
 ## Flask Apps starten
 Für jedes Modell in der jeweiligen Umgebung:
 
-    Kopiert die jeweilige FLASK-App einfach in die entsprechende Umgebung und startet sie, z.B. mit
+Kopiert die jeweilige FLASK-App einfach in die entsprechende Umgebung und startet sie, z.B. mit
 
 	python BLIP.py
 
