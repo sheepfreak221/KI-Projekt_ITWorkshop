@@ -1,6 +1,11 @@
 # KI-Projekt aus dem IT-Workshop
 
-Dieses Repository enthält die FLASK-Apps der KI-Modelle aus unserem Workshop.
+Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal zu nutzen:  
+
+- **Fertige Flask-Apps** für jedes KI-Modell (BLIP, EasyOCR, GPT-2 etc.)  
+- **Modernes Webinterface** zur einfachen Bedienung  
+- **Nginx-Konfiguration** (`sites-available/default`) für Production-Einsatz  
+- **Klarer Setup-Guide** zum Aufsetzen in wenigen Minuten  
 
 ## Empfohlene Umgebung
 **Linux (z.B. Debian) wird dringend empfohlen**
