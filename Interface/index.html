@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI-Projekt</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Das KI-Projekt</h1>
+
+        <p>Das KI-Projekt nutzt Open-Source-Modelle, um Jugendlichen (also euch) einen praktischen Einstieg in Künstliche Intelligenz zu ermöglichen. In einer virtuellen Maschine hättet ihr mit Flask-Apps eigene Anwendungen zur Bilderkennung, Textverarbeitung und Bildverbesserung umsetzen können. Dabei hättet ihr aus fünf Modellen gewählt, ein Webinterface zur Steuerung erstellt und die Modelle kreativ für euer individuelles Projekt kombiniert.</p>
+
+        <p>Das KI-Projekt wurde extra für den N3150 optimiert, weil der nur die Power eines feuchten Toasts hat – also mussten „schwache“ bzw. kleine Modelle her. Aber da der Workshop nicht wie geplant stattfindet, läuft das Ganze jetzt auf meinem fetten Ryzen, und das Ding rennt wie der Teufel! Ihr hättet echt kranke Sachen lernen können… aber naja, jetzt klickt ihr halt nur planlos im Kreis und nennt es „Lernen“... Schei� Bildungssystem!</p>
+        
+        <div class="card p-3">
+            <h3>Bildbeschreibung (BLIP)</h3>
+
+            <p>BLIP (Bootstrapping Language-Image Pre-training) ist ein Modell, das darauf abzielt, die Verbindung zwischen Bildern und Texten zu verbessern. Es nutzt eine Kombination aus Bild- und Sprachverarbeitung, um multimodale Aufgaben wie Bildunterschriftenerstellung und visuelle Fragebeantwortung zu bewältigen.</p> 
+            <p>(Lade ein Bild hoch und lasse es dir von BLIP beschreiben, Sprache der Ausgabe ist Englisch)</p>
+            <!-- Formular zum Hochladen des Bildes -->
+            <form id="uploadForm">
+                <input type="file" id="image" class="form-control mb-2" accept="image/*">
+                <button type="submit" class="btn btn-primary">Bild analysieren</button>
+            </form>
+
+            <!-- Container zum Anzeigen des hochgeladenen Bildes -->
+            <div id="imageContainer" class="mt-3"></div>
+
+            <!-- Container zum Anzeigen der Bildbeschreibung -->
+            <p id="result" class="mt-2"></p>
+        </div>
+
+        <div class="card p-3">
+            <h3>Sentimentanalyse (DistilBERT)</h3>
+
+            <p>DistilBERT (Bidirectional Encoder Representations from Transformers) wird in der Sentimentanalyse verwendet, um die emotionale Ausrichtung von Texten zu erkennen, indem es die kontextuelle Bedeutung von Wörtern erfasst und so präzisere Klassifizierungen ermöglicht. Durch seine kompakte Architektur bietet es eine schnellere Verarbeitung, was es ideal für Echtzeitanwendungen macht, bei denen schnelle Ergebnisse erforderlich sind.</p>
+            <p>(Schreibe oder kopiere z.B. ein Review (z.B. von <a href="https://www.rottentomatoes.com/" target="_blank">Rotten Tomatoes</a>) in den Prompt und lass dir von DistilBERT die Stimmung beschreiben, Sprache von Prompt und Ausgabe ist Englisch)</p>
+
+            <form id="textForm">
+                <input type="text" id="textInput_senti" class="form-control mb-2" This is a rather nutty Guardians of the Galaxy style romp with choppy action and very little in the way of a plot."> 
+                <button type="submit" class="btn btn-primary">Inhalt analysieren</button>
+            </form>
+            <p id="textResult_senti" class="mt-2"></p>
+        </div>
+
+        <div class="card p-3">
+            <h3>Textgenerierung (GPT-2)</h3>
+
+            <p>GPT-2 (Generative Pre-trained Transformer 2) ist ein leistungsstarkes Sprachmodell, das in der Lage ist, menschenähnlichen Text zu generieren. Es wurde auf einer großen Menge an Textdaten vortrainiert und kann für verschiedene Aufgaben wie Textvervollständigung, Übersetzung und kreative Schreibanwendungen eingesetzt werden.</p>
+            <p>(Schreibe oder kopiere den ersten Satz einer Geschichte (z.B. <a href="https://www.reddit.com/r/nosleep/comments/8chsch/i_met_someone_who_claimed_to_be_the_devil_and_i/" target="_blank"> diese</a>) in den Prompt und lasse sie dir von GPT-2 weitererzählen, Sprache von Prompt und Ausgabe ist Englisch)</p>
+
+            <form id="textForm_textgen">
+                <input type="text" id="textInput_textgen" class="form-control mb-2" placeholder="So when my friends tell me they want to go out for a night on the town, I say sure.">
+                <button type="submit" class="btn btn-primary">Text generieren</button>
+            </form>
+            <p id="textResult_textgen" class="mt-2"></p>
+        </div>
+
+        <div class="card p-3">
+            <h3>Texterkennung (EasyOCR)</h3>
+
+            <p>EasyOCR (Easy Optical Character Recognition) ist eine leistungsstarke Open-Source-Texterkennungsbibliothek, die in der Lage ist, Text aus Bildern und Dokumenten zu extrahieren. Sie unterstützt über 80 Sprachen und kombiniert moderne Deep-Learning-Techniken mit optimierten Algorithmen, um auch bei schwierigen Bedingungen wie schlechter Beleuchtung oder perspektivischen Verzerrungen gute Ergebnisse zu liefern.</p>
+            <p>(Lade ein Bild mit Text hoch, und EasyOCR wird den enthaltenen Text automatisch erkennen und extrahieren. Unterstützte Sprachen sind u. a. Englisch, Deutsch, Französisch und viele mehr.)</p>            
+            
+            <form id="ocrForm" enctype="multipart/form-data">
+                <input type="file" id="ocrImage" class="form-control mb-2">
+                <button type="submit" class="btn btn-primary">Text erkennen</button>
+            </form>
+            <div id="ocrImageContainer" class="mt-3"></div>
+            <p id="ocrResult" class="mt-2"></p>
+        </div>
+
+        <div class="card p-3">
+            <h3>Bildverbesserung (Real-ESRGAN)</h3>
+
+            <p>Real-ESRGAN (Enhanced Super-Resolution Generative Adversarial Network) ist ein fortschrittliches Bildverbesserungsmodell, das auf generativen neuronalen Netzen basiert. Es wurde speziell für die Rekonstruktion und Verbesserung von niedrigauflösenden oder verrauschten Bildern entwickelt und kann Details schärfen, Artefakte entfernen sowie die allgemeine Bildqualität deutlich verbessern.</p>
+            <p>(Lade ein unscharfes, verpixeltes oder komprimiertes Bild hoch (das Modell funktioniert am Besten mit Animes [z.B. von <a href="https://www.qwant.com/?t=images&q=anime&size=small" target="_blank">hier</a>]) und Real-ESRGAN wird eine verbesserte Version mit höherer Qualität generieren)</p>
+
+            <input type="file" id="realesrgan-image" class="form-control mb-2" accept="image/*">
+            <button onclick="processRealESRGAN()" class="btn btn-primary">Bild verbessern</button>
+    
+            <!-- Ergebniscontainer für Vollbild -->
+            <div id="realesrgan-result" class="mt-4"></div>
+        </div>
+
+        <script src="js/blip.js"></script>
+
+        <script src="js/distilbert.js"></script>
+
+        <script src="js/gpt2.js"></script>
+
+        <script src="js/easyocr.js"></script>
+
+        <script src="js/realesrgan.js"></script>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /home/workshop/kiprojekt/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # Real-ESRGAN API (Port 5006)
+
+    location /api/ {
+        proxy_pass http://localhost:5006/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        client_max_body_size 20M;
+        proxy_read_timeout 300s;
+    }
+
+    # EasyOCR API (Port 5005)
+
+    location /api/ocr/ {
+        proxy_pass http://localhost:5005/api/ocr/;  # Wichtig: /api/ocr/ hier auch anhängen
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+	}
+
+    # GPT-2 API (Port 5002)
+
+    location /api/textgen {
+        proxy_pass http://localhost:5002/api/textgen;  # Wichtig: Kein Slash am Ende!
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # DistilBERT API (Port 5001)
+
+    location /api/bert/ {
+        proxy_pass http://localhost:5001/api/bert/;  # Weiterleitung an Flask-App
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+
+    # BLIP API (Port 5000)
+
+     location /api/blip/ {
+        proxy_pass http://localhost:5000/api/blip/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+
+	client_max_body_size 20M;
+
+    }
+
+}
