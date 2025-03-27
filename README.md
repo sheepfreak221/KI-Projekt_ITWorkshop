@@ -1,6 +1,6 @@
 # KI-Projekt aus dem IT-Workshop
 
-Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal zu nutzen:  
+Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal bei dir am Rechner zu Betreiben:  
 
 - **Fertige Flask-Apps** für jedes KI-Modell (BLIP, EasyOCR, GPT-2 etc.)  
 - **Modernes Webinterface** zur einfachen Bedienung  
