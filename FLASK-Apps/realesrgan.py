@@ -73,4 +73,4 @@ def get_result(filename):
     return send_from_directory(OUTPUT_FOLDER, filename)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)  # Port auf 5000 geändert für Nginx
+    app.run(host='0.0.0.0', port=5006)  # Port auf 5000 geändert für Nginx
