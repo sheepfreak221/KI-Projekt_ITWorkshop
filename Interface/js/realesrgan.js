@@ -5,8 +5,7 @@ async function processRealESRGAN() {
     resultContainer.innerHTML = '<div class="loading-spinner">Verarbeite Bild...</div>';
     
     if (!fileInput.files.length) {
-        resultContainer.innerHTML = '<p class="text-danger"></p>';
-        alert("Bitte wähle ein Bild aus!");
+        resultContainer.innerHTML = '<p class="text-danger">Bitte wähle ein Bild aus!</p>';
         return;
     }
 
@@ -14,7 +13,8 @@ async function processRealESRGAN() {
     formData.append('file', fileInput.files[0]);
 
     try {
-        const response = await fetch('/api/process-image', {
+        // Angepasster Endpunkt für Blueprint
+        const response = await fetch('/realesrgan/api/process-image', {
             method: 'POST',
             body: formData
         });
@@ -23,14 +23,15 @@ async function processRealESRGAN() {
         
         if (data.error) throw new Error(data.error);
         
-        const enhancedUrl = `/api/results/${data.enhanced_image}?t=${Date.now()}`;
+        // Angepasster URL für Ergebnisse
+        const enhancedUrl = `/realesrgan/api/results/${data.enhanced_image}?t=${Date.now()}`;
         
         resultContainer.innerHTML = `
             <div class="result-fullsize">
                 <h4 class="mb-3">Verbessertes Ergebnis</h4>
-                <img src="${enhancedUrl}" class="enhanced-image">
+                <img src="${enhancedUrl}" class="enhanced-image" alt="Verbessertes Bild">
                 <div class="mt-3">
-                    <a href="${enhancedUrl} target="_blank"" download class="btn btn-success">
+                    <a href="${enhancedUrl}" download class="btn btn-success">
                         Bild herunterladen
                     </a>
                 </div>

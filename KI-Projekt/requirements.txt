@@ -1,0 +1,8 @@
+Flask
+Werkzeug
+transformers
+easyocr
+opencv-python
+Pillow
+numpy
+

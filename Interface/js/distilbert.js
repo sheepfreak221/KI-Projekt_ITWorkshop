@@ -9,7 +9,7 @@ document.getElementById('textForm').addEventListener('submit', async (event) => 
     }
     
 
-    const response = await fetch('/api/bert/chat', {  // Geändert zu NGINX-Route
+    const response = await fetch('/bert/api/bert/chat', {  // Geändert zu NGINX-Route
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

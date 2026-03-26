@@ -1,25 +1,27 @@
-from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
+from flask import Blueprint, request, jsonify, send_from_directory, current_app
 import os
 import subprocess
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
-CORS(app)
+realesrgan_bp = Blueprint('realesrgan', __name__)
 
 # Konfiguration
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'output'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
-
-# Verzeichnisse erstellen
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/api/process-image', methods=['POST'])
+def get_upload_folder():
+    upload_folder = os.path.join(current_app.root_path, 'realesrgan_uploads')
+    os.makedirs(upload_folder, exist_ok=True)
+    return upload_folder
+
+def get_output_folder():
+    output_folder = os.path.join(current_app.root_path, 'realesrgan_output')
+    os.makedirs(output_folder, exist_ok=True)
+    return output_folder
+
+@realesrgan_bp.route('/api/process-image', methods=['POST'])
 def process_image():
     if 'file' not in request.files:
         return jsonify({'error': 'Keine Datei hochgeladen'}), 400
@@ -33,19 +35,25 @@ def process_image():
 
     try:
         filename = secure_filename(file.filename)
-        input_path = os.path.join(UPLOAD_FOLDER, filename)
+        upload_folder = get_upload_folder()
+        output_folder = get_output_folder()
+        
+        input_path = os.path.join(upload_folder, filename)
         output_filename = f'enhanced_{filename}'
-        output_path = os.path.join(OUTPUT_FOLDER, output_filename)
+        output_path = os.path.join(output_folder, output_filename)
         
         file.save(input_path)
 
+        # Pfad zum realesrgan Tool (muss im Hauptverzeichnis liegen)
+        realesrgan_path = os.path.join(current_app.root_path, 'realesrgan-ncnn-vulkan')
+        
         cmd = [
-            './realesrgan-ncnn-vulkan',
+            realesrgan_path,
             '-i', input_path,
             '-o', output_path
         ]
         
-        result = subprocess.run(
+        subprocess.run(
             cmd,
             check=True,
             capture_output=True,
@@ -68,9 +76,7 @@ def process_image():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/results/<filename>')
+@realesrgan_bp.route('/api/results/<filename>')
 def get_result(filename):
-    return send_from_directory(OUTPUT_FOLDER, filename)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5006)  # Port auf 5000 geändert für Nginx
+    output_folder = get_output_folder()
+    return send_from_directory(output_folder, filename)

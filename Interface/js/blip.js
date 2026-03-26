@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('/api/blip/upload', {
+            const response = await fetch('/blip/api/blip/upload', {
                 method: 'POST',
                 body: formData
             });

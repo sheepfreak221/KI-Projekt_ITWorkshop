@@ -32,7 +32,7 @@ document.getElementById('ocrForm').addEventListener('submit', async function(e) 
     try {
         resultContainer.textContent = 'Text wird erkannt...';
         
-        const response = await fetch('/api/ocr/upload-ocr', {
+        const response = await fetch('/ocr/api/ocr/upload-ocr', {
             method: 'POST',
             body: formData
         });

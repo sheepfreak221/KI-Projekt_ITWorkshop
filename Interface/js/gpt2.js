@@ -9,7 +9,8 @@ document.getElementById('textForm_textgen').addEventListener('submit', async (ev
         return; // Abbruch, wenn kein Text vorhanden
     }
 
-    const response = await fetch('/api/textgen/', { // Geht jetzt über Nginx
+    // Angepasster Endpunkt für Blueprint
+    const response = await fetch('/gpt2/api/textgen/', { // Neuer Endpunkt
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
