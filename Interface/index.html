@@ -86,6 +86,25 @@
             <div id="realesrgan-result" class="mt-4"></div>
         </div>
 
+<div class="card p-3">
+    <h3>Text-to-Speech (Coqui TTS)</h3>
+    
+    <p>Coqui TTS ist ein modernes Text-to-Speech-Modell, das natürliche deutsche Sprache generiert. Es basiert auf Tacotron2 und erzeugt lebendige, menschlich klingende Sprachausgabe aus Text. Ideal für Vorlesefunktionen, Hörbücher oder Barrierefreiheit.</p>
+    <p>Gib einen deutschen Text ein (z.B. Geschichten, Nachrichten oder Sätze) und das Modell wird eine natürliche Sprachausgabe generieren. Bei längeren Texten wird die Sprache automatisch in Abschnitte unterteilt und zusammengefügt.</p>
+    
+    <div class="mb-3">
+        <label for="tts-text" class="form-label">Deutscher Text:</label>
+        <textarea id="tts-text" class="form-control" rows="5" placeholder="Gib hier deinen deutschen Text ein... z.B.: 'Hallo Welt, das ist ein Test der Sprachausgabe mit Coqui TTS.'"></textarea>
+    </div>
+    
+    <button onclick="generateSpeech()" class="btn btn-primary mb-3">
+        <i class="fas fa-volume-up"></i> Sprache generieren
+    </button>
+    
+    <!-- Audio-Player und Ergebnis -->
+    <div id="tts-result" class="mt-3"></div>
+</div>
+
         <script src="js/blip.js"></script>
 
         <script src="js/distilbert.js"></script>
@@ -95,6 +114,8 @@
         <script src="js/easyocr.js"></script>
 
         <script src="js/realesrgan.js"></script>
+
+        <script src="js/tts.js"></script>
     </div>
 
 </body>

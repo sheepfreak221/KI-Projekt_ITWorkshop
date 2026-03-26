@@ -1,8 +1,9 @@
-Flask
-Werkzeug
-transformers
-easyocr
-opencv-python
-Pillow
-numpy
-
+Flask==2.3.3
+Werkzeug==2.3.7
+transformers==4.36.2
+easyocr==1.7.1
+opencv-python==4.9.0.80
+Pillow==10.1.0
+numpy==1.22.0
+TTS==0.22.0
+pydub==0.25.1

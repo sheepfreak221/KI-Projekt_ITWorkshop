@@ -8,12 +8,12 @@ Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal am Re
 - **EasyOCR Texterkennung** - Texterkennung aus Bildern (Englisch)
 - **DistilBERT Sentiment-Analyse** - Stimmungserkennung von Texten (Englisch)
 - **BLIP Image Captioning** - Automatische Bildbeschreibungen (Englisch)
-- **Real-ESRGAN Bildverbesserung** - Upscaling und Verbesserung von Bildern
-
+- **Real-ESRGAN Bildverbesserung** - Upscaling und Verbesserung von Bildern (optimiert für Anime/Manga)
+- **Coqui TTS Text-to-Speech** - Natürliche Sprachausgabe in Deutsch (Tacotron2-Modell)
 ## Voraussetzungen
 
-- **Linux (z.B. Debian) wird dringend empfohlen**
-- Python 3.8 oder höher
+- **Linux (Ubuntu 22.04 LTS wird empfohlen)** - [Offizielle Download-Seite](https://releases.ubuntu.com/jammy/)
+- Python 3.10 (wichtig! Coqui TTS benötigt Python 3.8-3.11 (daher Ubuntu 22.04!), mit 3.10.4 getestet)
 - Nginx als Reverse-Proxy
 - mind. 8GB RAM (für alle Modelle empfohlen)
 - GPU optional (beschleunigt einige Modelle)
@@ -25,7 +25,7 @@ Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal am Re
 
 ## Installation
 
-### 1. Abhängigkeiten installieren (Debian)
+### 1. Abhängigkeiten installieren (Ubuntu)
 
 ```bash
 sudo apt update
@@ -65,7 +65,6 @@ cp KI-Projekt_ITWorkshop/KI-Projekt/* /srv/ki-projekt
 Die ausführbare Datei realesrgan-ncnn-vulkan muss im Hauptverzeichnis liegen.
 
 ```bash
-# Download (Beispiel für Linux x86_64)
 wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip
 unzip realesrgan-ncnn-vulkan-20220424-ubuntu.zip
 cp ./realesrgan-ncnn-vulkan-20220424-ubuntu/realesrgan-ncnn-vulkan /srv/ki-projekt/
@@ -78,7 +77,7 @@ cp -r ./realesrgan-ncnn-vulkan-20220424-ubuntu/models /srv/ki-projekt/
 
 ```bash
 pip install --upgrade pip
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cpu
 pip install -r requirements.txt
 ```
 
@@ -105,13 +104,15 @@ Der erste Start kann je nach Internetgeschwindigkeit 5-15 Minuten dauern (Downlo
 ## Abhängigkeiten (requirements.txt)
 
 ```bash
-Flask
-Werkzeug
-transformers
-easyocr
-opencv-python
-Pillow
-numpy
+Flask==2.3.3
+Werkzeug==2.3.7
+transformers==4.36.2
+easyocr==1.7.1
+opencv-python==4.9.0.80
+Pillow==10.1.0
+numpy==1.22.0
+TTS==0.22.0
+pydub==0.25.1
 ```
 
 ## Verzeichnisstruktur nach der Installation
@@ -124,21 +125,26 @@ numpy
 ├── blueprints/                     # Blueprint-Module
 │   ├── gpt2/                       # GPT-2 Textgenerator
 │   │   ├── __init__.py
-│   │   └── gpt2_routes.py
+│   │   └── routes.py
 │   ├── ocr/                        # EasyOCR Texterkennung
 │   │   ├── __init__.py
-│   │   └── ocr_routes.py
+│   │   └── routes.py
 │   ├── bert/                       # DistilBERT Sentiment-Analyse
 │   │   ├── __init__.py
-│   │   └── bert_routes.py
-│   ├── blip/                        # BLIP Image Captioning
+│   │   └── routes.py
+│   ├── blip/                       # BLIP Image Captioning
 │   │   ├── __init__.py
-│   │   └── blip_routes.py
-│   └── realesrgan/                 # Real-ESRGAN Bildverbesserung
+│   │   └── routes.py
+│   ├── realesrgan/                 # Real-ESRGAN Bildverbesserung
+│   │   ├── __init__.py
+│   │   └── routes.py
+│   └── coqui/                      # Coqui TTS Text zu Sprache
 │       ├── __init__.py
-│       └── realesrgan_routes.py
+│       └── routes.py
 ├── realesrgan_uploads/             # Temporäre Uploads für Real-ESRGAN
 ├── realesrgan_output/              # Verbesserte Bilder
+├── coqui_uploads/                  # Temporäre Uploads für Coqui TTS
+├── coqui_output/                   # Generierte Audiodateien
 └── venv/                           # Python virtuelle Umgebung
 
 /srv/www/
@@ -151,7 +157,8 @@ numpy
     ├── distilbert.js
     ├── easyocr.js
     ├── gpt2.js
-    └── realesrgan.js
+    ├── realesrgan.js
+    └── tts.js
 
 ```
 
@@ -165,6 +172,8 @@ numpy
 | BLIP | `/blip/api/blip/upload` | POST | Bildbeschreibung |
 | Real-ESRGAN | `/realesrgan/api/process-image` | POST | Bildverbesserung |
 | Real-ESRGAN | `/realesrgan/api/results/<filename>` | GET | Ergebnis abrufen |
+| Coqui TTS	| `/tts/api/tts/generate` |	POST | Text-to-Speech (deutsch) |
+| Coqui TTS | 	`/tts/api/tts/audio/<filename>` |	GET	| Generierte Audiodatei abrufen |
 
 
 ## Wichtige Hinweise
@@ -198,49 +207,61 @@ Dieses Projekt ist für Bildungszwecke gedacht. Die verwendeten Modelle unterlie
 ```nginx
 server {
     listen 80;
-    server_name <IP des Rechners>;
-    
+    server_name 10.0.0.27;
+
     client_max_body_size 50M;
-    
+
+    # Statische Startseite
     location / {
-        root /srv/www;
+        root /home/thomas/.pythonstuff/ki-projekt/interface;
         try_files $uri $uri/ /index.html;
         expires 1h;
         add_header Cache-Control "public, immutable";
     }
-    
+
+    # Blueprint-Routen direkt weiterleiten
     location /gpt2/ {
         proxy_pass http://127.0.0.1:5000/gpt2/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
-    
+
     location /ocr/ {
         proxy_pass http://127.0.0.1:5000/ocr/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_read_timeout 60s;
     }
-    
+
     location /bert/ {
         proxy_pass http://127.0.0.1:5000/bert/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
-    
+
     location /blip/ {
         proxy_pass http://127.0.0.1:5000/blip/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_read_timeout 60s;
     }
-    
+
     location /realesrgan/ {
         proxy_pass http://127.0.0.1:5000/realesrgan/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_read_timeout 120s;
     }
+
+    location /tts/ {
+        proxy_pass http://127.0.0.1:5000/tts/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
+
 }
 ```
