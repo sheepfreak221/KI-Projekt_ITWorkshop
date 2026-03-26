@@ -68,7 +68,7 @@ Die ausführbare Datei realesrgan-ncnn-vulkan muss im Hauptverzeichnis liegen.
 # Download (Beispiel für Linux x86_64)
 wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip
 unzip realesrgan-ncnn-vulkan-20220424-ubuntu.zip
-mv ./realesrgan-ncnn-vulkan-20220424-ubuntu/realesrgan-ncnn-vulkan /srv/ki-projekt/
+cp ./realesrgan-ncnn-vulkan-20220424-ubuntu/realesrgan-ncnn-vulkan /srv/ki-projekt/
 chmod +x /srv/ki-projekt/realesrgan-ncnn-vulkan
 
 cp -r ./realesrgan-ncnn-vulkan-20220424-ubuntu/models /srv/ki-projekt/
