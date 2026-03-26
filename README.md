@@ -25,11 +25,11 @@ Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal am Re
 
 ## Installation
 
-### 1. System abhängigkeiten installieren (Debian)
+### 1. Abhängigkeiten installieren (Debian)
 
 ```bash
 sudo apt update
-sudo apt install -y python3 python3-pip python3-venv nginx screen
+sudo apt install -y python3 python3-pip python3-venv nginx
 ```
 
 ### 2. Verzeichnisse erstellen und die Berechtigungen setzen
@@ -51,9 +51,8 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-
-
 ### 4. Klonen des Repository und kopieren der Dateien
+
 ```bash
 cd $HOME
 git clone https://github.com/sheepfreak221/KI-Projekt_ITWorkshop
@@ -64,6 +63,7 @@ cp KI-Projekt_ITWorkshop/KI-Projekt/* /srv/ki-projekt
 ### 5. Real-ESRGAN einrichten
 
 Die ausführbare Datei realesrgan-ncnn-vulkan muss im Hauptverzeichnis liegen.
+
 ```bash
 # Download (Beispiel für Linux x86_64)
 wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-ubuntu.zip
