@@ -1,12 +1,12 @@
 server {
     listen 80;
-    server_name 10.0.0.27;
+    server_name <IP des Rechners>;
 
     client_max_body_size 50M;
 
     # Statische Startseite
     location / {
-        root /home/thomas/.pythonstuff/ki-projekt/interface;
+        root /srv/www;
         try_files $uri $uri/ /index.html;
         expires 1h;
         add_header Cache-Control "public, immutable";
