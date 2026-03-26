@@ -195,9 +195,18 @@ Dieses Projekt ist für Bildungszwecke gedacht. Die verwendeten Modelle unterlie
 
 ## Danksagung
 
-- [Hugging Face](https://huggingface.co/) für die Transformer-Modelle
-- [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) für die Bildverbesserung
-- [EasyOCR](https://github.com/JaidedAI/EasyOCR) für die Texterkennung
+### Modelle & Bibliotheken
+- [Hugging Face Transformers](https://github.com/huggingface/transformers) – DistilBERT (Sentiment-Analyse), GPT-2 (Textgenerierung), BLIP (Bildbeschreibung)
+- [OpenAI](https://openai.com/research/gpt-2) – GPT-2 Textgenerierungsmodell
+- [Salesforce](https://github.com/salesforce/BLIP) – BLIP Image Captioning
+- [Coqui TTS](https://github.com/coqui-ai/TTS) – Text-to-Speech (Thorsten-Modell für Deutsch)
+- [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) – Bildverbesserung
+- [EasyOCR](https://github.com/JaidedAI/EasyOCR) – Texterkennung
+
+### Frameworks & Tools
+- [Flask](https://github.com/pallets/flask) – Webframework
+- [PyTorch](https://github.com/pytorch/pytorch) – Machine-Learning-Framework
+- [Nginx](https://nginx.org/) – Reverse-Proxy
 
 
 ## Zusätzlich benötigte Dateien:
