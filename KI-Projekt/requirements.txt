@@ -7,3 +7,4 @@ Pillow==10.1.0
 numpy==1.22.0
 TTS==0.22.0
 pydub==0.25.1
+diffusers==0.30.3

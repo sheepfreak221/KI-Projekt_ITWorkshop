@@ -10,6 +10,12 @@ Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal am Re
 - **BLIP Image Captioning** - Automatische Bildbeschreibungen (Englisch)
 - **Real-ESRGAN Bildverbesserung** - Upscaling und Verbesserung von Bildern (optimiert für Anime/Manga)
 - **Coqui TTS Text-to-Speech** - Natürliche Sprachausgabe in Deutsch (Tacotron2-Modell)
+- **Stable Diffusion 1.5 Text-to-Image** - Bilderzeugung aus Textbeschreibungen 
+
+## Screenshot
+
+[*Das KI-Projekt im Einsatz – alle 7 Modelle in einer Übersicht*](Screenshots/ki-projekt-screenshot.png)
+
 ## Voraussetzungen
 
 - **Linux (Ubuntu 22.04 LTS wird empfohlen)** - [Offizielle Download-Seite](https://releases.ubuntu.com/jammy/)
@@ -113,6 +119,7 @@ Pillow==10.1.0
 numpy==1.22.0
 TTS==0.22.0
 pydub==0.25.1
+diffusers==0.30.3
 ```
 
 ## Verzeichnisstruktur nach der Installation
@@ -124,22 +131,25 @@ pydub==0.25.1
 ├── requirements.txt                # Python Abhängigkeiten
 ├── blueprints/                     # Blueprint-Module
 │   ├── gpt2/                       # GPT-2 Textgenerator
-│   │   ├── __init__.py
+│   │   ├── init.py
 │   │   └── routes.py
 │   ├── ocr/                        # EasyOCR Texterkennung
-│   │   ├── __init__.py
+│   │   ├── init.py
 │   │   └── routes.py
 │   ├── bert/                       # DistilBERT Sentiment-Analyse
-│   │   ├── __init__.py
+│   │   ├── init.py
 │   │   └── routes.py
 │   ├── blip/                       # BLIP Image Captioning
-│   │   ├── __init__.py
+│   │   ├── init.py
 │   │   └── routes.py
 │   ├── realesrgan/                 # Real-ESRGAN Bildverbesserung
-│   │   ├── __init__.py
+│   │   ├── init.py
 │   │   └── routes.py
-│   └── coqui/                      # Coqui TTS Text zu Sprache
-│       ├── __init__.py
+│   ├── coqui/                      # Coqui TTS Text zu Sprache
+│   │   ├── init.py
+│   │   └── routes.py
+│   └── sd15/                       # Stable Diffusion 1.5 Text zu Bild
+│       ├── init.py
 │       └── routes.py
 ├── realesrgan_uploads/             # Temporäre Uploads für Real-ESRGAN
 ├── realesrgan_output/              # Verbesserte Bilder
@@ -158,22 +168,31 @@ pydub==0.25.1
     ├── easyocr.js
     ├── gpt2.js
     ├── realesrgan.js
-    └── tts.js
+    ├── tts.js
+    └── sd15.js
 
 ```
 
 ## API-Endpunkte
 
+
 | App | Endpunkt | Methode | Beschreibung |
 |-----|----------|---------|--------------|
-| GPT-2 | `/gpt2/api/textgen/` | POST | Textgenerierung |
+| GPT-2 | `/gpt2/api/textgen/` | POST | Textgenerierung (Geschichten) |
 | EasyOCR | `/ocr/api/ocr/upload-ocr` | POST | Texterkennung aus Bild |
 | DistilBERT | `/bert/api/bert/chat` | POST | Sentiment-Analyse |
 | BLIP | `/blip/api/blip/upload` | POST | Bildbeschreibung |
 | Real-ESRGAN | `/realesrgan/api/process-image` | POST | Bildverbesserung |
 | Real-ESRGAN | `/realesrgan/api/results/<filename>` | GET | Ergebnis abrufen |
-| Coqui TTS	| `/tts/api/tts/generate` |	POST | Text-to-Speech (deutsch) |
-| Coqui TTS | 	`/tts/api/tts/audio/<filename>` |	GET	| Generierte Audiodatei abrufen |
+| Coqui TTS | `/tts/api/tts/generate` | POST | Text-to-Speech (deutsch) |
+| Coqui TTS | `/tts/api/tts/audio/<filename>` | GET | Generierte Audiodatei abrufen |
+| Stable Diffusion 1.5 | `/sd15/api/generate` | POST | **Bildgenerierung aus Text (Base64)** |
+| Stable Diffusion 1.5 | `/sd15/api/generate/file` | POST | **Bildgenerierung als Datei** |
+| Stable Diffusion 1.5 | `/sd15/api/info` | GET | **Modell-Informationen** |
+
+
+
+
 
 
 ## Wichtige Hinweise
@@ -228,12 +247,20 @@ server {
         add_header Cache-Control "public, immutable";
     }
 
-    # Blueprint-Routen direkt weiterleiten
     location /gpt2/ {
         proxy_pass http://127.0.0.1:5000/gpt2/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_read_timeout 120s;
+    }
+
+    location /sd15/ {
+        proxy_pass http://127.0.0.1:5000/sd15/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_read_timeout 350s;
     }
 
     location /ocr/ {

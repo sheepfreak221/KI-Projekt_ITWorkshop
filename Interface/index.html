@@ -10,11 +10,17 @@
 <body>
     <div class="container">
         <h1 class="text-center mb-4">Das KI-Projekt</h1>
-
+<!--
         <p>Das KI-Projekt nutzt Open-Source-Modelle, um Jugendlichen (also euch) einen praktischen Einstieg in Künstliche Intelligenz zu ermöglichen. In einer virtuellen Maschine hättet ihr mit Flask-Apps eigene Anwendungen zur Bilderkennung, Textverarbeitung und Bildverbesserung umsetzen können. Dabei hättet ihr aus fünf Modellen gewählt, ein Webinterface zur Steuerung erstellt und die Modelle kreativ für euer individuelles Projekt kombiniert.</p>
 
         <p>Das KI-Projekt wurde extra für den N3150 optimiert, weil der nur die Power eines feuchten Toasts hat – also mussten „schwache“ bzw. kleine Modelle her. Aber da der Workshop nicht wie geplant stattfindet, läuft das Ganze jetzt auf meinem fetten Ryzen, und das Ding rennt wie der Teufel! Ihr hättet echt kranke Sachen lernen können… aber naja, jetzt klickt ihr halt nur planlos im Kreis und nennt es „Lernen“... Schei� Bildungssystem!</p>
-        
+-->
+<div class="card p-3">
+<h3><i class="fas fa-info-circle"></i> Über dieses Projekt</h3>
+<p>Das KI-Projekt nutzt ausschließlich Open-Source-Modelle (FOSS), um Jugendlichen (also euch) einen praktischen Einstieg in Künstliche Intelligenz zu ermöglichen – Modelle, die auch ihr ohne Probleme selbst lokal nutzen könnt!</p>
+<p>Eine Besonderheit ist, dass das Projekt ursprünglich für mein altes Notebook mit einer Celeron N3150 CPU geplant war! Daher wurden bewusst kleinere Modelle ausgewählt, die auch auf schwächerer Hardware annehmbar lauffähig sind. Das soll auch gleich zeigen, dass für lokale KI keine Cloud-Dienste und auch keine Monster-GPU nötig sind.</p>
+<p class="mb-0">Die Modelle laufen alle auf CPU und sind bewusst ungefiltert (auch keine Ethikfilter!) – ihr seht also, was KI wirklich kann, inklusive der Ecken, an denen sie manchmal scheitert. Nutzt das kritisch, probiert aus und habt Spaß beim Entdecken!</p>
+</div>
         <div class="card p-3">
             <h3>Bildbeschreibung (BLIP)</h3>
 
@@ -87,7 +93,7 @@
         </div>
 
 <div class="card p-3">
-    <h3>Text-to-Speech (Coqui TTS)</h3>
+    <h3>Sprachsynthese (Coqui TTS)</h3>
     
     <p>Coqui TTS ist ein modernes Text-to-Speech-Modell, das natürliche deutsche Sprache generiert. Es basiert auf Tacotron2 und erzeugt lebendige, menschlich klingende Sprachausgabe aus Text. Ideal für Vorlesefunktionen, Hörbücher oder Barrierefreiheit.</p>
     <p>Gib einen deutschen Text ein (z.B. Geschichten, Nachrichten oder Sätze) und das Modell wird eine natürliche Sprachausgabe generieren. Bei längeren Texten wird die Sprache automatisch in Abschnitte unterteilt und zusammengefügt.</p>
@@ -105,6 +111,32 @@
     <div id="tts-result" class="mt-3"></div>
 </div>
 
+<div class="card p-3">
+    <h3>Bildgenerierung (Stable Diffusion 1.5)</h3>
+    
+    <p>Stable Diffusion ist ein leistungsstarkes Text-zu-Bild-Modell, das aus Textbeschreibungen realistische Bilder generiert. Es wurde von RunwayML und Stability AI entwickelt und läuft vollständig lokal auf dem Rechner.</p>
+    <p>Gib eine englischen Prompt ein und das Modell generiert ein 512x512 Pixel Bild. Je detaillierter der Prompt, desto besser das Ergebnis. Beispiele: <em>"a beautiful mountain landscape at sunset", "a cute cat sitting on a chair", "a cyberpunk city at night"</em></p>
+    <p class="text-muted"><i class="fas fa-clock"></i> <strong>Achtung:</strong> Da das Modell auf der CPU läuft, dauert die Generierung einige Minuten pro Bild.</p>
+    
+    <div class="mb-3">
+        <label for="sd15-prompt" class="form-label">Prompt (Englisch):</label>
+        <textarea id="sd15-prompt" class="form-control" rows="2" 
+            placeholder="a beautiful mountain landscape at sunset, 4k, highly detailed"></textarea>
+    </div>
+    
+    <div class="mb-3">
+        <label for="sd15-negative" class="form-label">Negativ-Prompt (optional):</label>
+        <input type="text" id="sd15-negative" class="form-control" placeholder="blurry, low quality, ugly">
+        <small class="text-muted">Was das Bild NICHT enthalten soll</small>
+    </div>
+    
+    <button onclick="generateImage()" class="btn btn-primary">
+        <i class="fas fa-image"></i> Bild generieren
+    </button>
+    
+    <div id="sd15-result" class="mt-3"></div>
+</div>
+
         <script src="js/blip.js"></script>
 
         <script src="js/distilbert.js"></script>
@@ -116,6 +148,9 @@
         <script src="js/realesrgan.js"></script>
 
         <script src="js/tts.js"></script>
+
+        <script src="js/sd15.js"></script>
+
     </div>
 
 </body>
