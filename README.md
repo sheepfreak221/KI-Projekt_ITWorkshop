@@ -1,6 +1,6 @@
 # KI-Projekt aus dem IT-Workshop
 
-Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal am Rechner zu Betreiben. Dabei handelt es sich um eine Flask-basierte Webanwendung mit fünf verschiedenen KI-Modellen für Text- und Bildverarbeitung. Ideal für den Einsatz in Schulen und anderen Bildungseinrichtungen.
+Dieses Repository enthält alles, was du brauchst, um das KI-Projekt lokal am Rechner zu Betreiben. Dabei handelt es sich um eine Flask-basierte Webanwendung mit sieben verschiedenen KI-Modellen für Text- und Bildverarbeitung. Ideal für den Einsatz in Schulen und anderen Bildungseinrichtungen.
 
 ## Features
 
